@@ -2,11 +2,11 @@
 package handler
 
 import (
-	"User-Service/internal/model"
-	"User-Service/internal/service"
-	pr "User-Service/proto"
 	"context"
 	"fmt"
+	"github.com/OVantsevich/User-Service/internal/model"
+	"github.com/OVantsevich/User-Service/internal/service"
+	pr "github.com/OVantsevich/User-Service/proto"
 
 	"github.com/sirupsen/logrus"
 )

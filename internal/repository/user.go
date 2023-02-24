@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"User-Service/internal/model"
+	"github.com/OVantsevich/User-Service/internal/model"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )

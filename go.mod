@@ -1,4 +1,4 @@
-module User-Service
+module github.com/OVantsevich/User-Service
 
 go 1.19
 

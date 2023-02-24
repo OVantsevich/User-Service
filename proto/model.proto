@@ -1,5 +1,7 @@
 syntax = "proto3";
-option go_package = ".";
+option go_package = "github.com/OVantsevich/User-Service/proto";
+
+package userservce_proto;
 
 service UserService{
   rpc Signup(SignupRequest)returns(SignupResponse);

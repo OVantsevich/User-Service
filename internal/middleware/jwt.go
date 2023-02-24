@@ -2,9 +2,9 @@
 package middleware
 
 import (
-	"User-Service/internal/service"
 	"context"
 	"fmt"
+	"github.com/OVantsevich/User-Service/internal/service"
 
 	"github.com/golang-jwt/jwt/v4"
 	"google.golang.org/grpc"

@@ -6,12 +6,12 @@ import (
 	"fmt"
 	"net"
 
-	"User-Service/internal/config"
-	"User-Service/internal/handler"
-	"User-Service/internal/middleware"
-	"User-Service/internal/repository"
-	"User-Service/internal/service"
-	pr "User-Service/proto"
+	"github.com/OVantsevich/User-Service/internal/config"
+	"github.com/OVantsevich/User-Service/internal/handler"
+	"github.com/OVantsevich/User-Service/internal/middleware"
+	"github.com/OVantsevich/User-Service/internal/repository"
+	"github.com/OVantsevich/User-Service/internal/service"
+	pr "github.com/OVantsevich/User-Service/proto"
 
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -25,11 +25,10 @@ func main() {
 		logrus.Fatal(err)
 	}
 
-	listen, err := net.Listen("tcp", "localhost:12344")
+	listen, err := net.Listen("tcp", fmt.Sprintf("localhost:%s", cfg.Port))
 	if err != nil {
 		defer logrus.Fatalf("error while listening port: %e", err)
 	}
-	fmt.Println("Server successfully started on port :12344...")
 
 	var repos service.UserRepository
 	repos, err = dbConnection(cfg)

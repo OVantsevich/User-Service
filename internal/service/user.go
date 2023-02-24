@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"User-Service/internal/model"
+	"github.com/OVantsevich/User-Service/internal/model"
 
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
