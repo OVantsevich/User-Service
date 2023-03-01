@@ -31,16 +31,18 @@ message RefreshRequest{
 }
 
 message UpdateRequest{
-  string email = 1;
-  string name = 2;
-  int32 age = 3;
+  string ID = 1;
+  string email = 2;
+  string name = 3;
+  int32 age = 4;
 }
 
 message Request{
+  string ID = 1;
 }
 
 message UserByIdRequest{
-  string id = 1;
+  string ID = 1;
 }
 
 
