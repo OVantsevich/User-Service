@@ -141,7 +141,7 @@ func (h *User) UserByID(ctx context.Context, request *pr.UserByIdRequest) (respo
 
 	response = &pr.UserByIdResponse{}
 	var user *model.User
-	user, err = h.service.GetByID(ctx, request.Id)
+	user, err = h.service.GetByID(ctx, request.ID)
 	if err != nil {
 		err = fmt.Errorf("userHandler - UserByID - GetByID: %w", err)
 		logrus.Error(err)
