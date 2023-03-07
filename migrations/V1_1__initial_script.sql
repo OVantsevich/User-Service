@@ -30,10 +30,7 @@ create table if not exists users
     "password" varchar(200) not null,
     "name"     varchar(50)  not null,
     age        integer      not null,
-    "role"     varchar(100) not null
-        constraint users_role_fk
-            references roles
-            on update cascade on delete cascade,
+    "role"     varchar(100) not null default 'user',
     token      varchar(200) not null default '',
     deleted    boolean      not null default false,
     created    timestamp(6)          default CURRENT_TIMESTAMP(6) not null,

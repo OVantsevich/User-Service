@@ -11,9 +11,6 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-// userID id
-const userID = "user"
-
 // User postgres entity
 type User struct {
 	Pool *pgxpool.Pool
@@ -28,11 +25,12 @@ func NewUser(pool *pgxpool.Pool) *User {
 func (r *User) CreateUser(ctx context.Context, user *model.User) (*model.User, error) {
 	user.Created = time.Now()
 	user.Updated = time.Now()
-	_, err := r.Pool.Exec(ctx,
-		`insert into users (id, "login", email, "role", "password", "name", age) values ($1, $2, $3, $4, $5, $6, $7) returning role;`,
-		user.ID, user.Login, user.Email, userID, user.Password, user.Name, user.Age)
+	row := r.Pool.QueryRow(ctx,
+		`insert into users (id, "login", email, "password", "name", age) values ($1, $2, $3, $4, $5, $6) returning role;`,
+		user.ID, user.Login, user.Email, user.Password, user.Name, user.Age)
+	err := row.Scan(&user.Role)
 	if err != nil {
-		return nil, fmt.Errorf("user - CreateUser - Exec: %w", err)
+		return nil, fmt.Errorf("user - CreateUser - Scan: %w", err)
 	}
 
 	return user, nil
@@ -41,13 +39,11 @@ func (r *User) CreateUser(ctx context.Context, user *model.User) (*model.User, e
 // GetUserByLogin get user by login
 func (r *User) GetUserByLogin(ctx context.Context, login string) (*model.User, error) {
 	user := model.User{}
-	err := r.Pool.QueryRow(ctx, `select u.id, u.name, u.age, u.login, u.password, u.token, u.email, r.name
-									from users u
-											 join roles r on r.id = u.role
-									where u.login = $1 and u.deleted=false`, login).Scan(
-		&user.ID, &user.Name, &user.Age, &user.Login, &user.Password, &user.Token, &user.Email, &user.Role)
+	err := r.Pool.QueryRow(ctx, `select id, "name", age, "role", login, password, token, email, "name" 
+									from users 	where login = $1 and deleted=false`, login).Scan(
+		&user.ID, &user.Name, &user.Age, &user.Role, &user.Login, &user.Password, &user.Token, &user.Email)
 	if err != nil {
-		return nil, fmt.Errorf("user - GetUserByLogin - QueryRow: %w", err)
+		return nil, fmt.Errorf("user - GetUserByLogin - Scan: %w", err)
 	}
 
 	return &user, nil
@@ -56,13 +52,11 @@ func (r *User) GetUserByLogin(ctx context.Context, login string) (*model.User, e
 // GetUserByID get user by login
 func (r *User) GetUserByID(ctx context.Context, id string) (*model.User, error) {
 	user := model.User{}
-	err := r.Pool.QueryRow(ctx, `select u.id, u.name, u.age, u.login, u.password, u.token, u.email, r.name
-									from users u
-											 join roles r on r.id = u.role
-									where u.id = $1 and u.deleted=false`, id).Scan(
-		&user.ID, &user.Name, &user.Age, &user.Login, &user.Password, &user.Token, &user.Email, &user.Role)
+	err := r.Pool.QueryRow(ctx, `select id, "name", age, "role", login, password, token, email, "name"
+									from users where id = $1 and deleted=false`, id).Scan(
+		&user.ID, &user.Name, &user.Age, &user.Role, &user.Login, &user.Password, &user.Token, &user.Email)
 	if err != nil {
-		return nil, fmt.Errorf("user - GetUserByID - QueryRow: %w", err)
+		return nil, fmt.Errorf("user - GetUserByID - Scan: %w", err)
 	}
 
 	return &user, nil
@@ -71,10 +65,10 @@ func (r *User) GetUserByID(ctx context.Context, id string) (*model.User, error) 
 // UpdateUser update user
 func (r *User) UpdateUser(ctx context.Context, id string, user *model.User) error {
 	var idCheck int
-	err := r.Pool.QueryRow(ctx, "update users set email=$1, name=$2, age=$3, updated=$4 where id=$5 and deleted=false returning id",
+	err := r.Pool.QueryRow(ctx, `update users set email=$1, "name"=$2, age=$3, updated=$4 where id=$5 and deleted=false returning id`,
 		user.Email, user.Name, user.Age, user.Updated, id).Scan(&idCheck)
 	if err != nil {
-		return fmt.Errorf("user - UpdateUser - Exec: %w", err)
+		return fmt.Errorf("user - UpdateUser - Scan: %w", err)
 	}
 
 	return nil
