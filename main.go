@@ -8,12 +8,10 @@ import (
 
 	"github.com/OVantsevich/User-Service/internal/config"
 	"github.com/OVantsevich/User-Service/internal/handler"
-	"github.com/OVantsevich/User-Service/internal/middleware"
 	"github.com/OVantsevich/User-Service/internal/repository"
 	"github.com/OVantsevich/User-Service/internal/service"
 	pr "github.com/OVantsevich/User-Service/proto"
 
-	"github.com/golang-jwt/jwt/v4"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
@@ -39,9 +37,10 @@ func main() {
 
 	userService := service.NewUserServiceClassic(repos, cfg.JwtKey)
 
-	ns := grpc.NewServer(middleware.JwtAuth(func(token *jwt.Token) (interface{}, error) {
-		return []byte(cfg.JwtKey), nil
-	}))
+	//ns := grpc.NewServer(middleware.JwtAuth(func(token *jwt.Token) (interface{}, error) {
+	//	return []byte(cfg.JwtKey), nil
+	//}))
+	ns := grpc.NewServer()
 	server := handler.NewUserHandlerClassic(userService, cfg.JwtKey)
 	pr.RegisterUserServiceServer(ns, server)
 

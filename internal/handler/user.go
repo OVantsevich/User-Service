@@ -5,7 +5,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/OVantsevich/User-Service/internal/model"
-	"github.com/OVantsevich/User-Service/internal/service"
 	pr "github.com/OVantsevich/User-Service/proto"
 
 	"github.com/sirupsen/logrus"
@@ -94,7 +93,7 @@ func (h *User) Refresh(ctx context.Context, request *pr.RefreshRequest) (respons
 
 // Update handler update
 func (h *User) Update(ctx context.Context, request *pr.UpdateRequest) (response *pr.UpdateResponse, err error) {
-	var claims = ctx.Value("user").(*service.CustomClaims)
+	//var claims = ctx.Value("user").(*service.CustomClaims)
 
 	user := &model.User{
 		Email: request.Email,
@@ -102,7 +101,7 @@ func (h *User) Update(ctx context.Context, request *pr.UpdateRequest) (response 
 		Age:   int(request.Age),
 	}
 	response = &pr.UpdateResponse{}
-	err = h.service.Update(ctx, claims.ID, user)
+	err = h.service.Update(ctx, request.ID, user)
 	if err != nil {
 		err = fmt.Errorf("userHandler - Update - Update: %w", err)
 		logrus.Error(err)
@@ -114,11 +113,11 @@ func (h *User) Update(ctx context.Context, request *pr.UpdateRequest) (response 
 }
 
 // Delete handler delete
-func (h *User) Delete(ctx context.Context, _ *pr.Request) (response *pr.DeleteResponse, err error) {
-	var claims = ctx.Value("user").(*service.CustomClaims)
+func (h *User) Delete(ctx context.Context, request *pr.Request) (response *pr.DeleteResponse, err error) {
+	//var claims = ctx.Value("user").(*service.CustomClaims)
 
 	response = &pr.DeleteResponse{}
-	err = h.service.Delete(ctx, claims.ID)
+	err = h.service.Delete(ctx, request.ID)
 	if err != nil {
 		err = fmt.Errorf("userHandler - Delete - Delete: %w", err)
 		logrus.Error(err)
@@ -131,13 +130,13 @@ func (h *User) Delete(ctx context.Context, _ *pr.Request) (response *pr.DeleteRe
 
 // UserByID handler user by login
 func (h *User) UserByID(ctx context.Context, request *pr.UserByIdRequest) (response *pr.UserByIdResponse, err error) {
-	var claims = ctx.Value("user").(*service.CustomClaims)
-
-	if claims.Role != "admin" {
-		err = fmt.Errorf("access denied")
-		logrus.Error(err)
-		return
-	}
+	//var claims = ctx.Value("user").(*service.CustomClaims)
+	//
+	//if claims.Role != "admin" {
+	//	err = fmt.Errorf("access denied")
+	//	logrus.Error(err)
+	//	return
+	//}
 
 	response = &pr.UserByIdResponse{}
 	var user *model.User
