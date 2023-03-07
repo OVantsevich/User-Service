@@ -55,6 +55,7 @@ func NewUserServiceClassic(rps UserRepository, key string) *User {
 
 // Signup service signup
 func (u *User) Signup(ctx context.Context, user *model.User) (accessToken, refreshToken string, userResult *model.User, err error) {
+	userResult = &model.User{}
 	if err = passwordvalidator.Validate(user.Password, passwordStrength); err != nil {
 		return "", "", nil, fmt.Errorf("userService - Signup - Validate: %w", err)
 	}

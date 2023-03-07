@@ -29,7 +29,7 @@ func (r *User) CreateUser(ctx context.Context, user *model.User) (*model.User, e
 	user.Created = time.Now()
 	user.Updated = time.Now()
 	_, err := r.Pool.Exec(ctx,
-		"insert into users (id, login, email, role, password, name, age) values ($1, $2, $3, $4, $5, $6, $7) returning role;",
+		`insert into users (id, "login", email, "role", "password", "name", age) values ($1, $2, $3, $4, $5, $6, $7) returning role;`,
 		user.ID, user.Login, user.Email, userID, user.Password, user.Name, user.Age)
 	if err != nil {
 		return nil, fmt.Errorf("user - CreateUser - Exec: %w", err)
