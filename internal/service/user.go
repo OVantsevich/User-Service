@@ -169,7 +169,7 @@ func (u *User) createJWT(ctx context.Context, user *model.User) (accessTokenStr,
 	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, accessClaims)
 	accessTokenStr, err = accessToken.SignedString(u.jwtKey)
 	if err != nil {
-		return "", "", fmt.Errorf("userService - createJWT - SignedString: %w", err)
+		return "", "", fmt.Errorf("userService - createJWT - S	ignedString: %w", err)
 	}
 
 	refreshClaims := &CustomClaims{

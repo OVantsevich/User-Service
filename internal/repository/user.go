@@ -64,7 +64,7 @@ func (r *User) GetUserByID(ctx context.Context, id string) (*model.User, error) 
 
 // UpdateUser update user
 func (r *User) UpdateUser(ctx context.Context, id string, user *model.User) error {
-	var idCheck int
+	var idCheck string
 	err := r.Pool.QueryRow(ctx, `update users set email=$1, "name"=$2, age=$3, updated=$4 where id=$5 and deleted=false returning id`,
 		user.Email, user.Name, user.Age, user.Updated, id).Scan(&idCheck)
 	if err != nil {
@@ -76,7 +76,7 @@ func (r *User) UpdateUser(ctx context.Context, id string, user *model.User) erro
 
 // RefreshUser refresh user
 func (r *User) RefreshUser(ctx context.Context, id, token string) error {
-	var idCheck int
+	var idCheck string
 	err := r.Pool.QueryRow(ctx, "update users set token=$1, updated=$2 where id=$3 and deleted=false returning id",
 		token, time.Now(), id).Scan(&idCheck)
 	if err != nil {
@@ -88,7 +88,7 @@ func (r *User) RefreshUser(ctx context.Context, id, token string) error {
 
 // DeleteUser delete user
 func (r *User) DeleteUser(ctx context.Context, id string) error {
-	var idCheck int
+	var idCheck string
 	err := r.Pool.QueryRow(ctx, "update users set Deleted=true, updated=$1 where id=$2 and deleted=false returning id",
 		time.Now(), id).Scan(&idCheck)
 	if err != nil {
