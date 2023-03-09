@@ -39,7 +39,7 @@ func (r *User) CreateUser(ctx context.Context, user *model.User) (*model.User, e
 // GetUserByLogin get user by login
 func (r *User) GetUserByLogin(ctx context.Context, login string) (*model.User, error) {
 	user := model.User{}
-	err := r.Pool.QueryRow(ctx, `select id, "name", age, "role", login, password, token, email, "name" 
+	err := r.Pool.QueryRow(ctx, `select id, "name", age, "role", login, password, token, email
 									from users 	where login = $1 and deleted=false`, login).Scan(
 		&user.ID, &user.Name, &user.Age, &user.Role, &user.Login, &user.Password, &user.Token, &user.Email)
 	if err != nil {
@@ -52,7 +52,7 @@ func (r *User) GetUserByLogin(ctx context.Context, login string) (*model.User, e
 // GetUserByID get user by login
 func (r *User) GetUserByID(ctx context.Context, id string) (*model.User, error) {
 	user := model.User{}
-	err := r.Pool.QueryRow(ctx, `select id, "name", age, "role", login, password, token, email, "name"
+	err := r.Pool.QueryRow(ctx, `select id, "name", age, "role", login, password, token, email
 									from users where id = $1 and deleted=false`, id).Scan(
 		&user.ID, &user.Name, &user.Age, &user.Role, &user.Login, &user.Password, &user.Token, &user.Email)
 	if err != nil {

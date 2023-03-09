@@ -41,7 +41,7 @@ type User struct {
 	jwtKey []byte
 }
 
-// CustomClaims claims with login and role
+// CustomClaims claims with id and role
 type CustomClaims struct {
 	ID   string `json:"id"`
 	Role string `json:"role"`
